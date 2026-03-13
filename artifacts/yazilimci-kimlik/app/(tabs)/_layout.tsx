@@ -5,7 +5,7 @@ import { Icon, Label, NativeTabs } from "expo-router/unstable-native-tabs";
 import { SymbolView } from "expo-symbols";
 import { Feather } from "@expo/vector-icons";
 import React from "react";
-import { Platform, StyleSheet, View, useColorScheme } from "react-native";
+import { Platform, StyleSheet, View } from "react-native";
 
 import Colors from "@/constants/colors";
 
@@ -30,12 +30,15 @@ function NativeTabLayout() {
         <Icon sf={{ default: "at", selected: "at.circle.fill" }} />
         <Label>İletişim</Label>
       </NativeTabs.Trigger>
+      <NativeTabs.Trigger name="basarimlar">
+        <Icon sf={{ default: "trophy", selected: "trophy.fill" }} />
+        <Label>Ödüller</Label>
+      </NativeTabs.Trigger>
     </NativeTabs>
   );
 }
 
 function ClassicTabLayout() {
-  const isDark = true;
   const isIOS = Platform.OS === "ios";
   const isWeb = Platform.OS === "web";
 
@@ -55,18 +58,9 @@ function ClassicTabLayout() {
         },
         tabBarBackground: () =>
           isIOS ? (
-            <BlurView
-              intensity={80}
-              tint="dark"
-              style={StyleSheet.absoluteFill}
-            />
+            <BlurView intensity={80} tint="dark" style={StyleSheet.absoluteFill} />
           ) : isWeb ? (
-            <View
-              style={[
-                StyleSheet.absoluteFill,
-                { backgroundColor: C.backgroundCard },
-              ]}
-            />
+            <View style={[StyleSheet.absoluteFill, { backgroundColor: C.backgroundCard }]} />
           ) : null,
       }}
     >
@@ -115,6 +109,18 @@ function ClassicTabLayout() {
               <SymbolView name="at" tintColor={color} size={22} />
             ) : (
               <Feather name="at-sign" size={22} color={color} />
+            ),
+        }}
+      />
+      <Tabs.Screen
+        name="basarimlar"
+        options={{
+          title: "Ödüller",
+          tabBarIcon: ({ color }) =>
+            isIOS ? (
+              <SymbolView name="trophy" tintColor={color} size={22} />
+            ) : (
+              <Feather name="award" size={22} color={color} />
             ),
         }}
       />

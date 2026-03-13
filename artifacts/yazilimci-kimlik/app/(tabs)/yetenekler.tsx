@@ -1,5 +1,5 @@
 import { Feather, MaterialCommunityIcons } from "@expo/vector-icons";
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Platform,
   ScrollView,
@@ -11,6 +11,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Animated, { FadeInDown } from "react-native-reanimated";
 
 import Colors from "@/constants/colors";
+import { useGame } from "@/context/GameContext";
 
 const C = Colors.light;
 const isWeb = Platform.OS === "web";
@@ -130,6 +131,11 @@ export default function YeteneklerSayfasi() {
   const insets = useSafeAreaInsets();
   const topPadding = isWeb ? 67 : insets.top;
   const bottomPadding = isWeb ? 34 : insets.bottom;
+  const { tabZiyaret } = useGame();
+
+  useEffect(() => {
+    tabZiyaret("yetenekler");
+  }, []);
 
   return (
     <View style={[styles.container, { backgroundColor: C.background }]}>

@@ -1,7 +1,7 @@
 import { Feather, MaterialCommunityIcons } from "@expo/vector-icons";
 import * as Haptics from "expo-haptics";
 import * as Linking from "expo-linking";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Alert,
   Platform,
@@ -12,6 +12,7 @@ import {
   View,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useGame } from "@/context/GameContext";
 import Animated, {
   FadeInDown,
   useAnimatedStyle,
@@ -94,6 +95,7 @@ const BAGLANTILAR: BaglantiItem[] = [
 function BaglantiKarti({ item, index }: { item: BaglantiItem; index: number }) {
   const scale = useSharedValue(1);
   const [kopyalandi, setKopyalandi] = useState(false);
+  const { contactTikla } = useGame();
 
   const animStyle = useAnimatedStyle(() => ({
     transform: [{ scale: scale.value }],
@@ -107,6 +109,7 @@ function BaglantiKarti({ item, index }: { item: BaglantiItem; index: number }) {
       scale.value = withSpring(1, { damping: 12 });
     });
 
+    contactTikla();
     setKopyalandi(true);
     setTimeout(() => setKopyalandi(false), 1500);
   };
@@ -148,6 +151,11 @@ export default function IletisimSayfasi() {
   const insets = useSafeAreaInsets();
   const topPadding = isWeb ? 67 : insets.top;
   const bottomPadding = isWeb ? 34 : insets.bottom;
+  const { tabZiyaret } = useGame();
+
+  useEffect(() => {
+    tabZiyaret("iletisim");
+  }, []);
 
   return (
     <View style={[styles.container, { backgroundColor: C.background }]}>

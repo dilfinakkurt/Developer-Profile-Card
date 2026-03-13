@@ -1,5 +1,5 @@
 import { Feather } from "@expo/vector-icons";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   FlatList,
   Platform,
@@ -18,6 +18,7 @@ import Animated, {
 import * as Haptics from "expo-haptics";
 
 import Colors from "@/constants/colors";
+import { useGame } from "@/context/GameContext";
 
 const C = Colors.light;
 const isWeb = Platform.OS === "web";
@@ -97,6 +98,7 @@ const DURUM_IKON: Record<Durum, string> = {
 function ProjeKarti({ proje, index }: { proje: Proje; index: number }) {
   const scale = useSharedValue(1);
   const durumRenk = DURUM_RENK[proje.durum];
+  const { xpKazan } = useGame();
 
   const animStyle = useAnimatedStyle(() => ({
     transform: [{ scale: scale.value }],
@@ -109,6 +111,7 @@ function ProjeKarti({ proje, index }: { proje: Proje; index: number }) {
     scale.value = withSpring(0.97, { damping: 8 }, () => {
       scale.value = withSpring(1, { damping: 10 });
     });
+    xpKazan(15, `${proje.ad} incelendi`);
   };
 
   return (
@@ -159,6 +162,11 @@ export default function ProjelerSayfasi() {
   const insets = useSafeAreaInsets();
   const topPadding = isWeb ? 67 : insets.top;
   const bottomPadding = isWeb ? 34 : insets.bottom;
+  const { tabZiyaret } = useGame();
+
+  useEffect(() => {
+    tabZiyaret("projeler");
+  }, []);
 
   const tamamlandi = PROJELER.filter((p) => p.durum === "Tamamlandı").length;
   const devamEdiyor = PROJELER.filter((p) => p.durum === "Devam Ediyor").length;
